@@ -490,6 +490,7 @@ def dataio_prepare(hparams, run_opts):
     @sb.utils.data_pipeline.provides("code_bos", "code_eos")
     def unit_bos_eos_pipeline(utt_id, code):
         """Load target codes"""
+        code = torch.as_tensor(code)
         code_bos = torch.cat((torch.LongTensor([hparams["bos_index"]]), code))
         yield code_bos
         code_eos = torch.cat((code, torch.LongTensor([hparams["eos_index"]])))
@@ -553,6 +554,14 @@ def dataio_prepare(hparams, run_opts):
         raise NotImplementedError(
             "sorting must be random, ascending or descending"
         )
+    
+    if cache_mode == "a":
+        # Warm up the cache
+        logger.info("Warming up the cache")
+        for dataset in datasets.values():
+            dataset.iterate_once()
+        logger.info("Switching to read-only")
+        unit_pipeline.change_file_mode("r")
 
     # Dynamic Batching is used, we instantiate the needed samplers.
     train_batch_sampler = None
