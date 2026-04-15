@@ -1,0 +1,22 @@
+[project]
+name = "speechbrain-sandbox"
+version = "0.0.1"
+dependencies = [
+    "speechbrain @ git+https://github.com/flexthink/speechbrain.git@paintbrush-fix",
+    "h5py>=3.16.0",
+]
+
+[tool.black]
+line-length = 79
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.flake8]
+exclude = "*.ipynb"
+
+[tool.pyright]
+exclude = ["**/*.ipynb", "**/__pycache__", "**/.*", "**/node_modules"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
