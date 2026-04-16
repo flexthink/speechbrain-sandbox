@@ -352,6 +352,24 @@ class S2UT(sb.core.Brain):
                 max_keys=["BLEU"],
                 num_to_keep=10,
             )
+        elif stage == sb.Stage.VALID:
+            stage_stats = {"loss": stage_loss}
+            lr_model = self.hparams.noam_annealing.current_lr
+            self.hparams.train_logger.log_stats(
+                stats_meta={
+                    "epoch": current_epoch,
+                    "lr_model": lr_model,
+                },
+                train_stats={"loss": self.train_stats},
+                valid_stats=stage_stats,
+            )
+            self.checkpointer.save_and_keep_only(
+                meta={
+                    "epoch": epoch,
+                },
+                ckpt_predicate=lambda ckpt: "BLEU" not in ckpt.meta,
+                num_to_keep=1,
+            )
 
         elif stage == sb.Stage.TEST:
             stage_stats = {"loss": stage_loss}
