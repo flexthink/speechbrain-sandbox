@@ -296,6 +296,7 @@ class S2UT(sb.core.Brain):
             The currently-starting epoch. This is passed
             `None` during the test stage.
         """
+        current_epoch = self.hparams.epoch_counter.current
         if stage == sb.Stage.TRAIN:
             self.train_stats = stage_loss
 
@@ -320,7 +321,6 @@ class S2UT(sb.core.Brain):
             if output_progress_sample:
                 self._save_progress_sample(epoch)
 
-            current_epoch = self.hparams.epoch_counter.current
             lr_model = self.hparams.noam_annealing.current_lr
             lr_wav2vec = 0.0
 
