@@ -98,6 +98,8 @@ class S2UT(sb.core.Brain):
                 for hyp in hyps:
                     if len(hyp) > 10:
                         code = torch.LongTensor(hyp[:-1])
+                        emb_count = self.test_vocoder.mods.generator.unit_embedding.weight.size(0)
+                        code = code.clip(max=emb_count - 1)
                         wav = self.test_vocoder.decode_unit(code.unsqueeze(-1))
                         wavs.append(wav.squeeze(0))
                     else:
