@@ -21,6 +21,7 @@ progress_samples_interval: 1
 progress_batch_sample_size: 4
 
 evaluation_interval: 4
+evaluation_sample_count: 32
 
 #################################
 # Data files and pre-processing #
