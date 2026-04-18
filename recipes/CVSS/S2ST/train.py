@@ -679,9 +679,11 @@ if __name__ == "__main__":
 
     train_dataset = datasets["train"]
     valid_dataset = datasets["valid_small"]
-    evaluation_sample_count = hparams.get("eval_valid_sample_count")
+    evaluation_sample_count = hparams.get("evaluation_sample_count")
     if evaluation_sample_count is not None:
-        valid_dataset = valid_dataset.select_n(evaluation_sample_count)
+        valid_dataset = valid_dataset.filtered_sorted(
+            select_n=evaluation_sample_count
+        )
     s2ut_brain.fit(
         s2ut_brain.hparams.epoch_counter,
         train_dataset,
